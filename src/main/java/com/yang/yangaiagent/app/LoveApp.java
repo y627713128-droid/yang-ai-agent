@@ -35,6 +35,9 @@ public class LoveApp {
     @Resource
     private Advisor loveAppRagCloudAdvisor;
 
+    @Resource
+    private VectorStore pgVectorVectorStore;
+
 
     //构造器创建Bean
     public LoveApp (ChatModel dashScopeChatModel, RedisChatMemory redisChatMemory) {
@@ -107,7 +110,9 @@ public class LoveApp {
                 // 应用知识库问答
 //                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 应用增强检索服务 基于云知识库
-                .advisors(loveAppRagCloudAdvisor)
+//                .advisors(loveAppRagCloudAdvisor)
+                //基于Pg Vector的 RAG 检索增强服务
+                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
